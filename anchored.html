@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anchored — A Beach Weekend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16232E;
+    --ink-soft:#25384A;
+    --sea:#2C5F6F;
+    --sea-light:#3E7A8C;
+    --sand:#F1E8D6;
+    --foam:#FAF7F0;
+    --rope:#6B5842;
+    --rope-light:#A98F6B;
+    --coral:#C1666B;
+    --line: rgba(107,88,66,0.28);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--foam);
+    color:var(--ink);
+    font-family:'Source Sans 3', sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--sea);
+    font-weight:500;
+  }
+  .eyebrow.on-dark{ color:var(--sand); opacity:0.85; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background: radial-gradient(120% 160% at 50% -10%, var(--ink-soft) 0%, var(--ink) 60%);
+    color:var(--foam);
+    padding:76px 24px 64px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:64px;
+    background:
+      radial-gradient(circle at 10% 100%, transparent 22px, var(--foam) 23px) 0 0/80px 100%,
+      radial-gradient(circle at 90% 100%, transparent 22px, var(--foam) 23px) 0 0/80px 100%;
+    background-repeat:repeat-x;
+  }
+  .anchor-mark{ width:46px; height:46px; margin:0 auto 22px; display:block; }
+  .anchor-mark path, .anchor-mark circle{
+    fill:none; stroke:var(--sand); stroke-width:5.5; stroke-linecap:round; stroke-linejoin:round;
+  }
+  .hero h1{
+    font-size:clamp(46px, 10vw, 74px);
+    letter-spacing:-0.01em;
+    color:var(--foam);
+  }
+  .hero .sub{
+    max-width:480px;
+    margin:16px auto 0;
+    font-size:17px;
+    color:var(--sand);
+    opacity:0.9;
+  }
+  .hero .verse{
+    max-width:420px;
+    margin:34px auto 0;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:19px;
+    color:var(--sand);
+    line-height:1.55;
+  }
+  .hero .verse-ref{
+    display:block;
+    margin-top:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-style:normal;
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--sea-light);
+  }
+  .hero .names{
+    margin-top:30px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--rope-light);
+  }
+
+  /* ---------- STICKY DAY NAV ---------- */
+  .daynav{
+    position:sticky; top:0; z-index:20;
+    display:flex;
+    background:var(--foam);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .daynav a{
+    flex:1 0 auto;
+    text-align:center;
+    padding:14px 10px;
+    text-decoration:none;
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    border-bottom:3px solid transparent;
+    opacity:0.55;
+    transition:opacity .2s, border-color .2s, color .2s;
+    white-space:nowrap;
+  }
+  .daynav a.active{
+    opacity:1;
+    color:var(--sea);
+    border-bottom-color:var(--sea);
+  }
+
+  /* ---------- INTRO NOTE ---------- */
+  .intro{
+    max-width:560px;
+    margin:0 auto;
+    padding:48px 28px 8px;
+    text-align:center;
+    color:var(--ink-soft);
+  }
+  .intro p{ margin:0; font-size:16px; }
+
+  /* ---------- CHAIN / DAY LIST ---------- */
+  .chain{
+    max-width:640px;
+    margin:0 auto;
+    padding:20px 24px 100px;
+    position:relative;
+  }
+  .chain::before{
+    content:"";
+    position:absolute;
+    left:34px; top:8px; bottom:60px;
+    width:2px;
+    background:repeating-linear-gradient(
+      to bottom, var(--rope-light) 0 6px, transparent 6px 12px
+    );
+  }
+  .day{
+    position:relative;
+    padding:56px 0 56px 68px;
+    scroll-margin-top:56px;
+  }
+  .day-link{
+    position:absolute;
+    left:22px; top:60px;
+    width:26px; height:26px;
+    border-radius:50%;
+    background:var(--foam);
+    border:2px solid var(--sea);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .day-link::after{
+    content:"";
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--sea);
+  }
+  .day-date{ margin-bottom:10px; }
+  .day h2{
+    font-size:clamp(28px, 6vw, 36px);
+    color:var(--ink);
+    margin-bottom:18px;
+    max-width:14ch;
+  }
+  .frame{
+    font-size:16.5px;
+    color:var(--ink-soft);
+    max-width:52ch;
+    margin-bottom:26px;
+  }
+
+  .card{
+    background:var(--sand);
+    border-radius:4px;
+    padding:20px 22px;
+    margin-bottom:18px;
+  }
+  .card .label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--rope);
+    margin-bottom:8px;
+    display:block;
+  }
+  .card p{ margin:0; }
+
+  .verse-card{
+    border-left:3px solid var(--sea);
+    background:var(--foam);
+    padding:16px 20px;
+    margin-bottom:14px;
+    border-radius:2px;
+  }
+  .verse-card .ref{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--sea);
+    display:block;
+    margin-bottom:6px;
+  }
+  .verse-card p{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:16.5px;
+    color:var(--ink);
+    margin:0;
+    line-height:1.55;
+  }
+
+  .questions{
+    margin-top:26px;
+  }
+  .questions .label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--rope);
+    margin-bottom:12px;
+    display:block;
+  }
+  .questions ul{
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .questions li{
+    padding:14px 0;
+    border-top:1px solid var(--line);
+    font-size:16.5px;
+    color:var(--ink);
+  }
+  .questions li:last-child{ border-bottom:1px solid var(--line); }
+
+  /* ---------- FOOTER ANCHOR ---------- */
+  .drop{
+    position:relative;
+    text-align:center;
+    padding:20px 24px 64px;
+  }
+  .drop .anchor-mark{ width:34px; height:34px; opacity:0.5; }
+  .drop .anchor-mark path, .drop .anchor-mark circle{ stroke:var(--rope); }
+  .drop p{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--rope);
+    margin-top:14px;
+  }
+
+  @media (max-width:480px){
+    .chain::before{ left:26px; }
+    .day{ padding-left:56px; }
+    .day-link{ left:14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="anchor-mark" viewBox="0 0 48 48">
+    <circle cx="24" cy="8" r="5"/>
+    <path d="M24 13 L24 40"/>
+    <path d="M15 23 L9 27 C9 36 16 41 24 42 C32 41 39 36 39 27 L33 23"/>
+    <path d="M14 21 L34 21"/>
+  </svg>
+  <p class="eyebrow on-dark">A Beach Weekend Devotional</p>
+  <h1>Anchored</h1>
+  <p class="sub">Four days for the two of us. To reconnect, get rooted, and finally rest.</p>
+  <p class="verse">"Which hope we have as an anchor of the soul, both sure and stedfast."
+    <span class="verse-ref">Hebrews 6:19</span>
+  </p>
+  <p class="names">Ethan &amp; Caroline · Thursday–Sunday</p>
+</header>
+
+<nav class="daynav" id="daynav">
+  <a href="#day1" data-day="day1" class="active">Thu · Day 1</a>
+  <a href="#day2" data-day="day2">Fri · Day 2</a>
+  <a href="#day3" data-day="day3">Sat · Day 3</a>
+  <a href="#day4" data-day="day4">Sun · Day 4</a>
+</nav>
+
+<div class="intro">
+  <p>Each day builds on the last, the way a chain runs down to what actually holds. Read it together, slow down where you want to, and let the questions turn into conversation.</p>
+</div>
+
+<main class="chain">
+
+  <section class="day" id="day1">
+    <span class="day-link"></span>
+    <p class="eyebrow day-date">Day One · Thursday</p>
+    <h2>Becoming Our Own</h2>
+    <p class="frame">Our marriage was never just about leaving family behind. It's about becoming a new anchor point, one that whatever family comes after us will trace back to. Every home starts somewhere. This weekend, ours starts by choosing what we carry forward and what we leave on the shore.</p>
+
+    <div class="card">
+      <span class="label">Prayer</span>
+      <p>Ask God to root your marriage first in him. Pray that as a couple you would become a steady anchor for each other, rather than drifting toward whatever shaped you growing up.</p>
+    </div>
+
+    <div class="verse-card">
+      <span class="ref">Genesis 2:24</span>
+      <p>Therefore shall a man leave his father and his mother, and shall cleave unto his wife: and they shall be one flesh.</p>
+    </div>
+    <div class="verse-card">
+      <span class="ref">Hebrews 6:19</span>
+      <p>Which hope we have as an anchor of the soul, both sure and stedfast, and which entereth into that within the veil.</p>
+    </div>
+
+    <div class="questions">
+      <span class="label">Talk it through</span>
+      <ul>
+        <li>Looking back at our family motto, how have we actually lived that out recently? Where have we drifted from it?</li>
+        <li>What's one pattern from our parents' marriages we want to intentionally do differently?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="day" id="day2">
+    <span class="day-link"></span>
+    <p class="eyebrow day-date">Day Two · Friday</p>
+    <h2>Gripping Solid Ground</h2>
+    <p class="frame">An anchor only holds if it's actually gripping something solid. The question isn't whether we believe the Bible. It's whether our confidence today is gripping God's word, or just gripping how we feel.</p>
+
+    <div class="card">
+      <span class="label">Prayer</span>
+      <p>Ask God for a real hunger for his word this weekend, not obligation. Pray that his truth would feel like solid ground under both of you.</p>
+    </div>
+
+    <div class="verse-card">
+      <span class="ref">Psalm 1:1-3</span>
+      <p>Blessed is the man that walketh not in the counsel of the ungodly, nor standeth in the way of sinners, nor sitteth in the seat of the scornful. But his delight is in the law of the LORD, and in his law doth he meditate day and night. And he shall be like a tree planted by the rivers of water, that bringeth forth his fruit in his season; his leaf also shall not wither, and whatsoever he doeth shall prosper.</p>
+    </div>
+    <div class="verse-card">
+      <span class="ref">Colossians 2:7</span>
+      <p>Rooted and built up in him, and stablished in the faith, as ye have been taught, abounding therein with thanksgiving.</p>
+    </div>
+
+    <div class="questions">
+      <span class="label">Talk it through</span>
+      <ul>
+        <li>What's one thing God has shown us recently through his word that actually changed how we thought or acted?</li>
+        <li>Our morning scripture routine has been a good anchor. What's one way we could make that time together even more meaningful or consistent?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="day" id="day3">
+    <span class="day-link"></span>
+    <p class="eyebrow day-date">Day Three · Saturday</p>
+    <h2>Held, Not Performing</h2>
+    <p class="frame">Our worth was never meant to come from a perfectly stable family. It was meant to come from being held by God, even when everything around us feels shaky.</p>
+
+    <div class="card">
+      <span class="label">Prayer</span>
+      <p>Ask God for the security to rest in being chosen by him, not in performing well enough to earn stability. Pray for peace over whatever feels shaky right now.</p>
+    </div>
+
+    <div class="verse-card">
+      <span class="ref">Ephesians 1:4-5</span>
+      <p>According as he hath chosen us in him before the foundation of the world, that we should be holy and without blame before him in love: having predestinated us unto the adoption of children by Jesus Christ to himself, according to the good pleasure of his will.</p>
+    </div>
+    <div class="verse-card">
+      <span class="ref">Psalm 62:5-6</span>
+      <p>My soul, wait thou only upon God; for my expectation is from him. He only is my rock and my salvation: he is my defence; I shall not be moved.</p>
+    </div>
+
+    <div class="questions">
+      <span class="label">Talk it through</span>
+      <ul>
+        <li>Where have we been looking for security in things that can't actually hold it?</li>
+        <li>How does knowing we're chosen by God change how we respond when our families feel unstable?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="day" id="day4">
+    <span class="day-link"></span>
+    <p class="eyebrow day-date">Day Four · Sunday</p>
+    <h2>Setting the Anchor</h2>
+    <p class="frame">An anchor lets a boat stop fighting the waves and just rest. This whole weekend has been pointing here. Now it's time to actually stop striving.</p>
+
+    <div class="card">
+      <span class="label">Prayer</span>
+      <p>Ask God to help you carry this rest home with you, not just feel it for a weekend. Pray for the courage to protect it once normal life starts back up.</p>
+    </div>
+
+    <div class="verse-card">
+      <span class="ref">Matthew 11:28-29</span>
+      <p>Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me, for I am meek and lowly in heart, and ye shall find rest unto your souls.</p>
+    </div>
+    <div class="verse-card">
+      <span class="ref">Exodus 20:8-10</span>
+      <p>Remember the sabbath day, to keep it holy. Six days shalt thou labour, and do all thy work, but the seventh day is the sabbath of the LORD thy God, in it thou shalt not do any work.</p>
+    </div>
+
+    <div class="questions">
+      <span class="label">Talk it through</span>
+      <ul>
+        <li>What's one moment this weekend where we actually felt rested and anchored in him, not just physically but really at peace? What made that possible?</li>
+        <li>What makes it hard to carry that kind of rest into our normal daily life? What's one thing we could change to protect it?</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<div class="drop">
+  <svg class="anchor-mark" viewBox="0 0 48 48">
+    <circle cx="24" cy="8" r="5"/>
+    <path d="M24 13 L24 40"/>
+    <path d="M15 23 L9 27 C9 36 16 41 24 42 C32 41 39 36 39 27 L33 23"/>
+    <path d="M14 21 L34 21"/>
+  </svg>
+  <p>Anchored · Ethan &amp; Caroline</p>
+</div>
+
+<script>
+  const links = document.querySelectorAll('.daynav a');
+  const sections = document.querySelectorAll('.day');
+  const nav = document.getElementById('daynav');
+  const navHeight = nav.offsetHeight;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector('.daynav a[data-day="' + entry.target.id + '"]');
+        if(active){
+          active.classList.add('active');
+          active.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+        }
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
